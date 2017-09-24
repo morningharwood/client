@@ -1,0 +1,60 @@
+@import './_modularscale';
+
+$dark-black-mh: #333;
+$black-mh: #555;
+$gray-mh: #888;
+$gray-light-mh: #ccc;
+$red-mh: tomato;
+$default-text: $black-mh;
+$bold: 700;
+$default-bleed: 72 * 1px;
+$hi-number: 420 * 1px;
+$display-font-family: 'Times New Roman', Times, serif;
+$sans-default-family: 'Noto Sans', sans-serif;
+$blue-link: #0095dd;
+$white: #fff;
+$white-off: #f7f7f7;
+$gray-off: #dedede;
+
+//sepia
+$sepia-bg: #f4ecd8;
+$sepia-copy: #5b4636;
+$sepia-link: $blue-link ;
+
+
+//dark
+$dark-bg: $dark-black-mh;
+$dark-copy: $gray-off;
+$dark-link: $blue-link;
+
+//light
+$light-bg: $white-off;
+$light-copy: $black-mh;
+$light-link: $blue-link;
+
+$modularscale: (
+  base: 1em,
+  ratio: $golden,
+  aug: (
+    ratio: $major-third
+  )
+);
+
+
+
+// FONT SIZES
+$common-size-0: 16 * 1;
+$common-size-4: 72 * 1;
+$headline: ms(5, $thread: aug);
+$paragraph: ms(1);
+
+
+// z-index multipliers
+$primary: 1000;
+$secondary: 100;
+$tertiary: 10;
+
+$ui: 1000;
+$layer-1: 100;
+$layer-2: 10;
+

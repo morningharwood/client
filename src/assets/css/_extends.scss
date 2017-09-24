@@ -1,0 +1,24 @@
+%full-wh {
+  height: 100%;
+  width: 100%;
+}
+
+%center-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+%full-abs-bleed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+
+%default-headline {
+  font-size: $default-bleed;
+}

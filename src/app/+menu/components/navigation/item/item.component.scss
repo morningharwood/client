@@ -1,0 +1,105 @@
+@import '../../../../../assets/css/_mixins';
+@import '../../../../../assets/css/_variables';
+
+$text: $default-text;
+$text-size: 36 * 1px;
+$hover: $red-mh;
+$index-offset: 4 * 1px;
+$i-font-size: 10 * 1px;
+
+app-item {
+  a {
+    color: $text;
+    cursor: pointer;
+    font-feature-settings: "kern" 1, "liga" 1, "swsh" 1;
+    font-size: $text-size;
+    line-height: 1.6;
+    position: relative;
+    text-decoration: none;
+    display: flex;
+
+    @include bp(4) {
+      line-height: 1.4;
+      font-size: 82px;
+    }
+
+    &:hover {
+      color: $hover;
+    }
+
+    &::before {
+      position: absolute;
+      content: '';
+      bottom: 0;
+      background: $text;
+      height: 1px;
+
+      @include bp(4) {
+        height: 2px;
+        left: 0;
+        right: $default-bleed;
+        width: 100%;
+      }
+    }
+
+    .dark-filter & {
+      color: $dark-copy;
+
+      &:hover {
+        color: $hover;
+      }
+
+      &::before {
+        background: $dark-copy;
+      }
+    }
+
+    .light-filter & {
+      color: $light-copy;
+
+      &:hover {
+        color: $hover;
+      }
+
+      &::before {
+        background: $light-copy;
+      }
+    }
+
+    .sepia-filter & {
+      color: $sepia-copy;
+
+      &:hover {
+        color: $hover;
+      }
+
+      &::before {
+        background: $sepia-copy;
+      }
+    }
+  }
+
+  span {
+    @include bp(4) {
+      padding: 0 $default-bleed 0 0;
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+  }
+
+  i {
+    @include hide();
+    font-style: normal;
+    font-weight: $bold;
+    position: absolute;
+
+    @include bp(4) {
+      @include show(inline-block);
+      bottom: $index-offset;
+      font-size: $i-font-size;
+      right: $index-offset;
+    }
+  }
+}

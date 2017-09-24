@@ -1,0 +1,118 @@
+@import '../../../../assets/css/_mixins.scss';
+@import '../../../../assets/css/_variables.scss';
+
+$text: $default-text;
+$hover: $red-mh;
+
+running-head {
+  font-family: $sans-default-family;
+  font-weight: 700;
+  font-size: 14px;
+  width: $common-size-4 + px;
+  height: 72px;
+  border-radius: 72px;
+  border: solid 1px darken($red-mh, 10%);
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background-size: auto 50%;
+
+  @include bp(4) {
+    border-radius: 0;
+    border: none;
+    width: 400px;
+    height: auto;
+    top: 72px;
+    left: 72px;
+    right: auto;
+    bottom: auto;
+    background: none;
+  }
+}
+.running-head__container {
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -$default-bleed;
+    left: -($default-bleed*2);
+    width: $hi-number;
+    height: 1px;
+
+    .dark-filter & {
+      background-color: $dark-copy;
+    }
+
+    .light-filter & {
+      background-color: $light-copy;
+    }
+
+    .sepia-filter & {
+      background-color: $sepia-copy;
+    }
+  }
+
+  dt {
+    @include accessible-hide();
+  }
+
+  dd {
+    @include hide();
+    line-height: 2;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: .7px;
+    padding-left: 24px;
+    position: relative;
+
+
+    @include bp(4) {
+      @include show(block);
+    }
+
+    &::before {
+      position: absolute;
+      left: 0;
+      top: 2px;
+      content: '\2014';
+
+    }
+  }
+
+  a {
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      .scroll-through {
+        border-bottom: dotted 1px $text;
+        color: $hover;
+      }
+    }
+
+    :visited {
+      color: $text;
+    }
+
+    &.highlight-all:hover {
+      color: $hover;
+      border-bottom: dotted 1px $text;
+    }
+
+    .dark-filter & {
+      color: $dark-copy;
+    }
+
+    .light-filter & {
+      color: $light-copy;
+    }
+
+    .sepia-filter & {
+      color: $sepia-copy;
+    }
+  }
+
+  .scroll-through {
+    color: $hover;
+    font-style: italic;
+  }
+}

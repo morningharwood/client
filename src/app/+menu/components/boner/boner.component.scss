@@ -1,0 +1,45 @@
+@import '../../../../assets/css/_mixins';
+@import '../../../../assets/css/_variables';
+
+$text: $default-text;
+$boner-width: 580 * 1px;
+$boner-height: ($boner-width/5);
+$rotation: 30deg;
+
+
+boner {
+  background: $text;
+  height: $boner-height/2;
+  left: 50%;
+  margin-left: -($boner-width/4);
+  margin-top: -($boner-height*($phi/2));
+  position: fixed;
+  top: 50%;
+  transform: rotate(-$rotation);
+  width: $boner-width/2;
+
+  @include bp(4) {
+    height: $boner-height;
+    left: 50%;
+    margin-left: -$boner-width/2;
+    margin-top: -$boner-height;
+    top: 70%;
+    width: $boner-width;
+  }
+
+  .dark-filter & {
+    background-color: $dark-copy;
+  }
+
+  .light-filter & {
+    background-color: $light-copy;
+  }
+
+  .sepia-filter & {
+    background-color: $sepia-copy;
+  }
+
+  h1 {
+    @include accessible-hide;
+  }
+}

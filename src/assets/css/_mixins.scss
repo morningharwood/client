@@ -1,0 +1,70 @@
+@mixin bp($type){
+  @if $type == 1 {
+    @media #{"(min-width: 576px)"} { @content; }
+  }
+  @else if $type == 2 {
+    @media #{"(min-width: 768px)"} { @content; }
+  }
+  @else if $type == 3 {
+    @media #{"(min-width: 992px)"} { @content; }
+  }
+  @else if $type == 4 {
+    @media #{"(min-width: 1200px)"} { @content; }
+  }
+  @else if $type == 5 {
+    @media #{"(min-width: 1599px)"} { @content; }
+  }
+
+}
+
+@mixin accessible-hide() {
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+}
+
+
+@mixin hide() {
+  display: none;
+  visibility: hidden;
+}
+
+@mixin show($display) {
+  display: $display;
+  visibility: visible;
+}
+
+@mixin center-flex() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin color-filter-base($color) {
+  $local-bg: $white-off;
+  $local-copy: $black-mh;
+  $local-link: $blue-link;
+
+  &.#{$color}-filter {
+    @if $color == 'sepia' {
+      $local-bg: $sepia-bg;
+      $local-copy: $sepia-copy;
+      $local-link: $sepia-link;
+    } @else if $color == 'dark' {
+      $local-bg: $dark-bg;
+      $local-copy: $dark-copy;
+      $local-link: $dark-link;
+    } @else {
+      $local-bg: $light-bg;
+      $local-copy: $light-copy;
+      $local-link: $light-link;
+    }
+
+    background-color: $local-bg;
+    color:  $local-copy;
+
+    a {
+      color: $local-link
+    }
+  }
+}
