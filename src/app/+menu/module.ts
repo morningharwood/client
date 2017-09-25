@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { MenuNavigationModule } from './components/navigation/navigation.module';
 import { BonerModule } from './components/boner/boner.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatchMediaService } from '../_handies/window/match-media';
+
 
 
 @NgModule({
@@ -23,7 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   exports: [ MenuContainer ],
   declarations: [ MenuContainer ],
-  providers: [],
+  providers: [ MatchMediaService ],
 })
 export class MenuModule {
 }

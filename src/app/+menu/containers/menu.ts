@@ -9,11 +9,13 @@ import {
   RunningHeader,
 } from '../components/running-head/running-head.content';
 import { Observable } from 'rxjs/Observable';
-import { MatchMediaService } from '../../_handies/window/match-media';
+import {
+  MatchMediaService as MMS,
+} from '../../_handies/window/match-media';
 
 
 function setEndWidth() {
-  if(MatchMediaService.bp('sm')){
+  if(MMS.bp('sm')){
     return '70vw';
   } else {
     return '30vw';
@@ -21,7 +23,7 @@ function setEndWidth() {
 }
 
 function setStartWidth() {
-  if(MatchMediaService.bp('sm')){
+  if(MMS.bp('sm')){
     return '0px';
   } else {
     return '20vw';
@@ -40,7 +42,7 @@ function setStartWidth() {
         'transform': 'rotate(0)',
         'transform-origin': '0 0'
       })),
-      state('harwood', style({
+      state(MMS.generateBpStateName('harwood', 'sm'), style({
         'width': setEndWidth(),
         'transform': 'rotate(-30deg)',
         'transform-origin': '0 0'
@@ -61,18 +63,18 @@ function setStartWidth() {
           'transform': 'rotate(-30deg)',
           'transform-origin': '0 0'
         })
-      ]))),
-      transition('void => *', animate('2.5s 0s cubic-bezier(0.455, 0.03, 0.515, 0.955)'))
+      ])))
     ])
   ]
 })
 export class MenuContainer implements OnInit {
   private state_: RunningHeader;
   public state$: Observable<Item>;
-  constructor() {
+  constructor(private mediaMatchService: MMS) {
   }
 
   public ngOnInit() {
+    this.mediaMatchService.onResize$.subscribe(console.log);
     this.state_ = bogo(initalState);
     this.state$ = pulseData$(this.state_, 'name');
   }
