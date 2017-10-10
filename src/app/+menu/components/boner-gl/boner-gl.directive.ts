@@ -39,9 +39,15 @@ export class BonerGlDirective implements OnInit {
       return;
     }
     this._setUpCanvas();
-    this._initGl();
+    this._setUpGl();
     this._createShaders();
-    this._createVertices();
+    this._pushBuffer();
+    this._locateVertices();
+    this._locateColors();
+    this._popBuffer();
+    this._locatePointSize();
+    this._locatePerspective();
+    this._setCamera(0,0,-2);
     this._draw();
   }
 
@@ -51,7 +57,7 @@ export class BonerGlDirective implements OnInit {
     this._canvas.height = window.innerHeight;
   }
 
-  private _initGl() {
+  private _setUpGl() {
     this._gl = this._canvas.getContext('webgl');
     this._gl.enable(this._gl.DEPTH_TEST);
     this._gl.viewport(0, 0, this._canvas.width, this._canvas.height);
@@ -64,10 +70,11 @@ export class BonerGlDirective implements OnInit {
       attribute vec4 coords;
       attribute float pointSize;
       uniform mat4 transformMatrix;
+      uniform mat4 perspectiveMatrix;
       attribute vec4 colors;
       varying vec4 varyingColors;
       void main(void) {
-        gl_Position = transformMatrix * coords;
+        gl_Position = perspectiveMatrix * transformMatrix * coords;
         gl_PointSize = pointSize;
         varyingColors = colors;
       }
@@ -107,7 +114,7 @@ export class BonerGlDirective implements OnInit {
     return processedShader;
   }
 
-  private _assignColors() {
+  private static _assignColors() {
     return [
       Math.random(),
       Math.random(),
@@ -119,35 +126,22 @@ export class BonerGlDirective implements OnInit {
   private _assignVertices (count): Array<number> {
     this.vertexCount = count;
     return [
-      0, 0, ...this._assignColors(),
-      1, 0, ...this._assignColors(),
-      1, 1, ...this._assignColors(),
-      0, 1, ...this._assignColors(),
+      0, 0, ...BonerGlDirective._assignColors(),
+      1, 0, ...BonerGlDirective._assignColors(),
+      1, 1, ...BonerGlDirective._assignColors(),
+      0, 1, ...BonerGlDirective._assignColors(),
     ];
   }
 
-  private _createVertices() {
+  private _pushBuffer() {
     const gl = this._gl;
-    const shaderProgram = this._shaderProgram;
     this._buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this._buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._assignVertices(4)), gl.DYNAMIC_DRAW);
-    this._locateVertices();
-    this._locateColors();
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
-    let pointSize = gl.getAttribLocation(shaderProgram, 'pointSize');
-    gl.vertexAttrib1f(pointSize, 5);
   }
 
-
-  private _draw() {
-    const gl = this._gl;
-    mat4.rotateX(this._matrix,this._matrix, 0.01);
-    const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, 'transformMatrix');
-    gl.uniformMatrix4fv(transformMatrix, false, this._matrix);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-    requestAnimationFrame(this._draw.bind(this));
+  private _popBuffer() {
+    this._gl.bindBuffer(this._gl.ARRAY_BUFFER, null);
   }
 
   private _locateVertices() {
@@ -163,5 +157,32 @@ export class BonerGlDirective implements OnInit {
     let colorsLocation = gl.getAttribLocation(this._shaderProgram, 'colors');
     gl.vertexAttribPointer(colorsLocation, 4, gl.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 6, Float32Array.BYTES_PER_ELEMENT * 2);
     gl.enableVertexAttribArray(colorsLocation);
+  }
+
+  private _locatePointSize() {
+    const gl = this._gl;
+    let pointSize = gl.getAttribLocation(this._shaderProgram, 'pointSize');
+    gl.vertexAttrib1f(pointSize, 5);
+  }
+
+  private _draw() {
+    const gl = this._gl;
+    mat4.rotateX(this._matrix,this._matrix, 0.01);
+    const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, 'transformMatrix');
+    gl.uniformMatrix4fv(transformMatrix, false, this._matrix);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+    requestAnimationFrame(this._draw.bind(this));
+  }
+
+  private _locatePerspective() {
+    let perspectiveMatrix = mat4.create();
+    mat4.perspective(perspectiveMatrix, 1, this._canvas.width / this._canvas.height, 0.1, 10);
+    const perspectiveLocation = this._gl.getUniformLocation(this._shaderProgram, 'perspectiveMatrix');
+    this._gl.uniformMatrix4fv(perspectiveLocation, false, perspectiveMatrix);
+  }
+
+  private _setCamera(x,y,z) {
+    mat4.translate(this._matrix, this._matrix, [x, y, z]);
   }
 }
