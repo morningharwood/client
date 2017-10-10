@@ -1,7 +1,7 @@
 import { zipObject } from 'lodash';
 
-
 export class MediaQueryHelper {
+
   public static smallAliases = new Set([
     0,
     's0',
@@ -49,15 +49,15 @@ export class MediaQueryHelper {
     1599,
   ];
 
-  public static getWindowSize() {
+  public static getWindowSize(fauxWindow = {innerHeight: 100, innerWidth: 100}) {
     return {
-      h: window.innerHeight,
-      w: window.innerWidth,
+      h: fauxWindow.innerHeight,
+      w: fauxWindow.innerWidth,
     };
   }
 
-  public static findBreakpoint() {
-    const { w: winWidth } = MediaQueryHelper.getWindowSize();
+  public static findBreakpoint(win= {innerHeight:0, innerWidth: 0}) {
+    const { w: winWidth } = MediaQueryHelper.getWindowSize(win);
     const bySize = (bp, idx, arr) => {
       if (winWidth <= bp) {
         switch (idx) {

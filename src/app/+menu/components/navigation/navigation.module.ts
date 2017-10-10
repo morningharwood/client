@@ -4,12 +4,14 @@ import { ItemComponent } from './item/item.component';
 import { NavigationComponent } from './navigation.component';
 import { RouterModule } from '@angular/router';
 import { CapitalizePipe } from '../../../_handies/pipes/capitalize';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
+    BrowserAnimationsModule
   ],
   declarations: [
     ItemComponent,

@@ -7,6 +7,10 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 
 
+/**
+ * TODO(mharwood) https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000158164-Angular-CLI-with-paths-in-tsconfig https://github.com/antonkarsten/sample/blob/master/src/tsconfig.app.json#L8 https://github.com/antonkarsten/sample/blob/master/src/app/app.module.ts#L8
+ * TODO(mharwood) im pretty sure ive seen better writeups than that, but it is aliasing paths in angular cli
+ */
 @NgModule({
   declarations: [
     AppComponent,

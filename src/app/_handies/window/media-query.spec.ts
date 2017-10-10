@@ -42,17 +42,7 @@ describe('MediaQuery library', () => {
       });
     });
   });
-  describe('getWindowSize', () => {
 
-    it('should return window size', () => {
-      expect(typeof MQ.getWindowSize().h)
-        .toBe('number');
-      expect(typeof MQ.getWindowSize().w)
-        .toBe('number');
-      expect(MQ.getWindowSize().w)
-        .toBe(784);
-    });
-  });
   describe('findBreakpoint()', () => {
     let mockWindows;
     beforeEach(() => {
@@ -66,7 +56,7 @@ describe('MediaQuery library', () => {
       expect(MQ.findBreakpoint())
         .toBeTruthy();
       expect(MQ.findBreakpoint())
-        .toBe(992);
+        .toBe(576);
     });
 
     it('should return s0 breakpoint', () => {

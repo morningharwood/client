@@ -7,14 +7,9 @@ import 'rxjs/add/operator/filter';
 
 @Injectable()
 export class MatchMediaService {
-  // listen to windowsize.
-  // if windowsize hits bp, fire event.
-  // add eventName into template trigger binding.
-  // use generateBpstateName in public template binding in controller.
-  // make animations to and from state
 
   get onResize$(): Observable<Window> {
-    return this.resizeSubject.asObservable().filter(_ => !_);
+    return this.resizeSubject.asObservable();
   }
 
   private resizeSubject: Subject<Window>;
@@ -27,6 +22,7 @@ export class MatchMediaService {
   private onResize(event: UIEvent) {
     this.resizeSubject.next(<Window>event.target);
   }
+
   public static bp(size) {
     return MQ.getBreakpointSizeByName(size) === MQ.findBreakpoint()
   }

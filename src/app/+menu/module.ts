@@ -10,7 +10,7 @@ import { MenuNavigationModule } from './components/navigation/navigation.module'
 import { BonerModule } from './components/boner/boner.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatchMediaService } from '../_handies/window/match-media';
-
+import { BonerGlModule } from './components/boner-gl/module';
 
 
 @NgModule({
@@ -21,7 +21,7 @@ import { MatchMediaService } from '../_handies/window/match-media';
     FolioModule,
     RunningHeadModule,
     MenuNavigationModule,
-    BonerModule,
+    BonerGlModule
   ],
   exports: [ MenuContainer ],
   declarations: [ MenuContainer ],

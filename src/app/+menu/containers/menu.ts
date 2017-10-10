@@ -35,37 +35,37 @@ function setStartWidth() {
   selector: 'menu-container',
   templateUrl: 'menu.html',
   styleUrls: ['./menu.scss'],
-  animations: [
-    trigger('goodmorning', [
-      state('void', style({
-        'width': '0',
-        'transform': 'rotate(0)',
-        'transform-origin': '0 0'
-      })),
-      state(MMS.generateBpStateName('harwood', 'sm'), style({
-        'width': setEndWidth(),
-        'transform': 'rotate(-30deg)',
-        'transform-origin': '0 0'
-      })),
-      transition('void => *', animate(2000, keyframes([
-        style({
-          'width': '0',
-          'transform': 'rotate(0)',
-          'transform-origin': '0 0'
-        }),
-        style({
-          'width': setStartWidth(),
-          'transform': 'rotate(0)',
-          'transform-origin': '0 0'
-        }),
-        style({
-          'width': setEndWidth(),
-          'transform': 'rotate(-30deg)',
-          'transform-origin': '0 0'
-        })
-      ])))
-    ])
-  ]
+  // animations: [
+  //   trigger('goodmorning', [
+  //     state('void', style({
+  //       'width': '0',
+  //       'transform': 'rotate(0)',
+  //       'transform-origin': '0 0'
+  //     })),
+  //     state(MMS.generateBpStateName('harwood', 'sm'), style({
+  //       'width': setEndWidth(),
+  //       'transform': 'rotate(-30deg)',
+  //       'transform-origin': '0 0'
+  //     })),
+  //     transition('void => *', animate(2000, keyframes([
+  //       style({
+  //         'width': '0',
+  //         'transform': 'rotate(0)',
+  //         'transform-origin': '0 0'
+  //       }),
+  //       style({
+  //         'width': setStartWidth(),
+  //         'transform': 'rotate(0)',
+  //         'transform-origin': '0 0'
+  //       }),
+  //       style({
+  //         'width': setEndWidth(),
+  //         'transform': 'rotate(-30deg)',
+  //         'transform-origin': '0 0'
+  //       })
+  //     ])))
+  //   ])
+  // ]
 })
 export class MenuContainer implements OnInit {
   private state_: RunningHeader;
@@ -74,7 +74,7 @@ export class MenuContainer implements OnInit {
   }
 
   public ngOnInit() {
-    this.mediaMatchService.onResize$.subscribe(console.log);
+    // this.mediaMatchService.onResize$.subscribe(console.log);
     this.state_ = bogo(initalState);
     this.state$ = pulseData$(this.state_, 'name');
   }
