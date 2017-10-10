@@ -24,6 +24,7 @@ export class BonerGlDirective implements OnInit {
   private _transformMatrix: WebGLUniformLocation | any;
   private width_: number = 0;
   private _matrix = mat4.create();
+  private _colors: number[];
 
   constructor(@Inject(PLATFORM_ID) platformId: string,
               private _mms: MatchMediaService,
@@ -43,16 +44,17 @@ export class BonerGlDirective implements OnInit {
     this._draw();
   }
 
-  private _initGl() {
-    this._gl = this._canvas.getContext('webgl');
-    this._gl.viewport(0, 0, this._canvas.width, this._canvas.height);
-    this._gl.clearColor(1, 1, 1, 1);
-  }
-
   private _setUpCanvas() {
     this._canvas = this._render.selectRootElement(this._elRef).nativeElement;
     this._canvas.width = window.innerWidth;
     this._canvas.height = window.innerHeight;
+  }
+
+  private _initGl() {
+    this._gl = this._canvas.getContext('webgl');
+    this._gl.enable(this._gl.DEPTH_TEST);
+    this._gl.viewport(0, 0, this._canvas.width, this._canvas.height);
+    this._gl.clearColor(1, 1, 1, 1);
   }
 
   private _rotate(angle) {
@@ -84,18 +86,21 @@ export class BonerGlDirective implements OnInit {
       attribute vec4 coords;
       attribute float pointSize;
       uniform mat4 transformMatrix;
-
+      attribute vec4 colors;
+      varying vec4 varyingColors;
       void main(void) {
         gl_Position = transformMatrix * coords;
         gl_PointSize = pointSize;
+        varyingColors = colors;
       }
     `;
 
     const fs = `
       precision mediump float;
       uniform vec4 color;
+      varying vec4 varyingColors;
       void main(void) {
-        gl_FragColor = color;
+        gl_FragColor = varyingColors;
       }
     `;
 
@@ -124,8 +129,18 @@ export class BonerGlDirective implements OnInit {
     return processedShader;
   }
 
-  private _makeVertices (count): Array<number> {
-    // let vertices = [];
+  private _assignColors(count) {
+    let colors = [];
+    for(let i = 0; i < count; i ++ ) {
+      colors.push(Math.random());
+      colors.push(Math.random());
+      colors.push(Math.random());
+      colors.push(1);
+    }
+    return colors;
+  }
+
+  private _assignVertices (count): Array<number> {
     this.vertexCount = count;
     return [0,0, 1, 0, 1, 1, 0, 1];
   }
@@ -133,19 +148,13 @@ export class BonerGlDirective implements OnInit {
   private _createVertices() {
     const gl = this._gl;
     const shaderProgram = this._shaderProgram;
-    this._vertices = this._makeVertices(4);
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._vertices), gl.DYNAMIC_DRAW);
-    let coords = gl.getAttribLocation(shaderProgram, "coords");
-    gl.vertexAttribPointer(coords, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(coords);
+    this._vertices = this._assignVertices(4);
+    this._colors = this._assignColors(4);
+    this._locateVertices();
+    this._locateColors();
 
-    let pointSize = gl.getAttribLocation(shaderProgram, "pointSize");
+    let pointSize = gl.getAttribLocation(shaderProgram, 'pointSize');
     gl.vertexAttrib1f(pointSize, 5);
-
-    let color = gl.getUniformLocation(shaderProgram, "color");
-    gl.uniform4f(color, 0, 0, 0, .15);
   }
 
 
@@ -155,7 +164,30 @@ export class BonerGlDirective implements OnInit {
     const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, 'transformMatrix');
     gl.uniformMatrix4fv(transformMatrix, false, this._matrix);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, this.vertexCount);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
     requestAnimationFrame(this._draw.bind(this));
+  }
+
+  private _locateVertices() {
+    const gl = this._gl;
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._vertices), gl.DYNAMIC_DRAW);
+
+    let coords = gl.getAttribLocation(this._shaderProgram, 'coords');
+    gl.vertexAttribPointer(coords, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(coords);
+  }
+
+  private _locateColors() {
+    const gl = this._gl;
+    let colorBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._colors), gl.STATIC_DRAW);
+
+    let colorsLocation = gl.getAttribLocation(this._shaderProgram, 'colors');
+    gl.vertexAttribPointer(colorsLocation, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(colorsLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 }
