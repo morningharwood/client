@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatchMediaService } from '../../../_handies/window/match-media';
 import { isPlatformBrowser } from '@angular/common';
-
+import {mat4} from 'gl-matrix';
 
 @Directive({
   selector: '[bonerGl]',
@@ -18,7 +18,12 @@ export class BonerGlDirective implements OnInit {
   private _canvas: any;
   private _gl: any;
   private _shaderProgram: any;
-  private vertices: any;
+  private vertexCount: number = 5000;
+  private _vertices: any;
+  private _angle: any = 0;
+  private _transformMatrix: WebGLUniformLocation | any;
+  private width_: number = 0;
+  private _matrix = mat4.create();
 
   constructor(@Inject(PLATFORM_ID) platformId: string,
               private _mms: MatchMediaService,
@@ -50,13 +55,38 @@ export class BonerGlDirective implements OnInit {
     this._canvas.height = window.innerHeight;
   }
 
+  private _rotate(angle) {
+    const cos = Math.cos(angle),
+      sin = Math.sin(angle),
+      matrix = new Float32Array(
+        [cos, sin, 0, 0,
+          -sin, cos, 0, 0,
+          0,   0, 1, 0,
+          0,   0, 0, 1]);
+    const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, "transformMatrix");
+    this._gl.uniformMatrix4fv(transformMatrix, false, matrix);
+  }
+
+  private _scale(w = 1, h = 1, d= 1) {
+    const matrix = [
+      w,    0,    0,   0,
+      0,    h,    0,   0,
+      0,    0,    d,   0,
+      0,    0,    0,   1
+    ];
+    const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, "transformMatrix");
+    this._gl.uniformMatrix4fv(transformMatrix, false, matrix);
+  }
+
   private _createShaders() {
     const gl = this._gl;
     const vs = `
       attribute vec4 coords;
       attribute float pointSize;
+      uniform mat4 transformMatrix;
+
       void main(void) {
-        gl_Position = coords;
+        gl_Position = transformMatrix * coords;
         gl_PointSize = pointSize;
       }
     `;
@@ -94,35 +124,38 @@ export class BonerGlDirective implements OnInit {
     return processedShader;
   }
 
+  private _makeVertices (count): Array<number> {
+    // let vertices = [];
+    this.vertexCount = count;
+    return [0,0, 1, 0, 1, 1, 0, 1];
+  }
+
   private _createVertices() {
     const gl = this._gl;
     const shaderProgram = this._shaderProgram;
-    this.vertices = [
-      -0.9, -0.9, 0.0,
-      0.9, -0.9, 0.0,
-      0.0,  0.9, 0.0,
-    ];
-
+    this._vertices = this._makeVertices(4);
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-    let coords = gl.getAttribLocation(shaderProgram, 'coords');
-    let pointSize = gl.getAttribLocation(shaderProgram, 'pointSize');
-
-    gl.vertexAttribPointer(coords, 3, gl.FLOAT, false, 0,0);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._vertices), gl.DYNAMIC_DRAW);
+    let coords = gl.getAttribLocation(shaderProgram, "coords");
+    gl.vertexAttribPointer(coords, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(coords);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    let color = gl.getUniformLocation(shaderProgram, 'color');
-    gl.uniform4f(color, 1, 0, 1, 1);
-    gl.vertexAttrib1f(pointSize, 10);
+    let pointSize = gl.getAttribLocation(shaderProgram, "pointSize");
+    gl.vertexAttrib1f(pointSize, 5);
 
-    gl.getUniformLocation(shaderProgram, 'color');
+    let color = gl.getUniformLocation(shaderProgram, "color");
+    gl.uniform4f(color, 0, 0, 0, .15);
   }
+
 
   private _draw() {
     const gl = this._gl;
+    mat4.rotateX(this._matrix,this._matrix, 0.01);
+    const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, 'transformMatrix');
+    gl.uniformMatrix4fv(transformMatrix, false, this._matrix);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.POINTS, 0, 3);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, this.vertexCount);
+    requestAnimationFrame(this._draw.bind(this));
   }
 }
