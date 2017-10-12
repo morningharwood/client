@@ -21,7 +21,8 @@ import { BonerGlModule } from './components/boner-gl/module';
     FolioModule,
     RunningHeadModule,
     MenuNavigationModule,
-    BonerGlModule
+    BonerGlModule,
+    BonerModule
   ],
   exports: [ MenuContainer ],
   declarations: [ MenuContainer ],

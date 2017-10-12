@@ -26,6 +26,7 @@ export class BonerGlDirective implements OnInit {
   private _matrix = mat4.create();
   private _colors: number[];
   private _buffer: any;
+  private _indexCount: number;
 
   constructor(@Inject(PLATFORM_ID) platformId: string,
               private _mms: MatchMediaService,
@@ -45,9 +46,10 @@ export class BonerGlDirective implements OnInit {
     this._locateVertices();
     this._locateColors();
     this._popBuffer();
+    this._locateIndices();
     this._locatePointSize();
     this._locatePerspective();
-    this._setCamera(0,0,-2);
+    this._setCamera(0,0,-4);
     this._draw();
   }
 
@@ -126,10 +128,14 @@ export class BonerGlDirective implements OnInit {
   private _assignVertices (count): Array<number> {
     this.vertexCount = count;
     return [
-      0, 0, ...BonerGlDirective._assignColors(),
-      1, 0, ...BonerGlDirective._assignColors(),
-      1, 1, ...BonerGlDirective._assignColors(),
-      0, 1, ...BonerGlDirective._assignColors(),
+      -1, -1, -1, ...BonerGlDirective._assignColors(),
+      1, -1, -1,  ...BonerGlDirective._assignColors(),
+      -1,  1, -1, ...BonerGlDirective._assignColors(),
+      1,  1, -1,  ...BonerGlDirective._assignColors(),
+      -1,  1,  1, ...BonerGlDirective._assignColors(),
+      1,  1,  1,  ...BonerGlDirective._assignColors(),
+      -1, -1,  1, ...BonerGlDirective._assignColors(),
+      1, -1,  1,  ...BonerGlDirective._assignColors(),
     ];
   }
 
@@ -137,7 +143,7 @@ export class BonerGlDirective implements OnInit {
     const gl = this._gl;
     this._buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this._buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._assignVertices(4)), gl.DYNAMIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._assignVertices(8)), gl.DYNAMIC_DRAW);
   }
 
   private _popBuffer() {
@@ -148,14 +154,14 @@ export class BonerGlDirective implements OnInit {
     const gl = this._gl;
 
     let coords = gl.getAttribLocation(this._shaderProgram, 'coords');
-    gl.vertexAttribPointer(coords, 2, gl.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 6, 0);
+    gl.vertexAttribPointer(coords, 3, gl.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 7, 0);
     gl.enableVertexAttribArray(coords);
   }
 
   private _locateColors() {
     const gl = this._gl;
     let colorsLocation = gl.getAttribLocation(this._shaderProgram, 'colors');
-    gl.vertexAttribPointer(colorsLocation, 4, gl.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 6, Float32Array.BYTES_PER_ELEMENT * 2);
+    gl.vertexAttribPointer(colorsLocation, 4, gl.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 7, Float32Array.BYTES_PER_ELEMENT * 3);
     gl.enableVertexAttribArray(colorsLocation);
   }
 
@@ -171,7 +177,7 @@ export class BonerGlDirective implements OnInit {
     const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, 'transformMatrix');
     gl.uniformMatrix4fv(transformMatrix, false, this._matrix);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+    gl.drawElements(gl.TRIANGLES, this._indexCount, gl.UNSIGNED_BYTE, 0);
     requestAnimationFrame(this._draw.bind(this));
   }
 
@@ -184,5 +190,21 @@ export class BonerGlDirective implements OnInit {
 
   private _setCamera(x,y,z) {
     mat4.translate(this._matrix, this._matrix, [x, y, z]);
+  }
+
+  private _locateIndices() {
+    const indices = [
+      0, 1, 2,   1, 2, 3,
+      2, 3, 4,   3, 4, 5,
+      4, 5, 6,   5, 6, 7,
+      6, 7, 0,   7, 0, 1,
+      0, 2, 6,   2, 6, 4,
+      1, 3, 7,   3, 7, 5
+    ];
+
+    this._indexCount = indices.length;
+    const indexBuffer = this._gl.createBuffer();
+    this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    this._gl.bufferData(this._gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), this._gl.STATIC_DRAW)
   }
 }
