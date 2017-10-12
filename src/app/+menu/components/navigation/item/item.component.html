@@ -1,4 +1,4 @@
-<a [routerLink]="[data.link]">
+<a [routerLink]="[data.link]" audioContext [frequency]="(100 - (index * 20))">
   <span [@animate]="enterState">{{data.name | capitalize}}</span>
   <i>0{{index}}</i>
 </a>

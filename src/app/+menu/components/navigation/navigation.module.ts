@@ -5,13 +5,15 @@ import { NavigationComponent } from './navigation.component';
 import { RouterModule } from '@angular/router';
 import { CapitalizePipe } from '../../../_handies/pipes/capitalize';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AudioContextModule } from '../audio-context/module';
 
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AudioContextModule
   ],
   declarations: [
     ItemComponent,

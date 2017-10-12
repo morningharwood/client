@@ -66,6 +66,9 @@ console.log(AspectRatioService.getOrientations());
   templateUrl: './boner.component.html',
   styleUrls: [ './boner.component.scss' ],
   encapsulation: ViewEncapsulation.None,
+  animations: [
+
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // you can checkout the ObservableMedia from '@angular/flex-layout'
