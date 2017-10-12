@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { MenuModule } from './+menu/module';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
+import { SundialModule } from './components/sundial/module';
 
 
 /**
@@ -18,6 +19,7 @@ import { routes } from './app.routes';
   imports: [
     BrowserModule,
     MenuModule,
+    SundialModule,
     RouterModule.forRoot(routes)
   ],
   providers: [],

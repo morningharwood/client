@@ -11,6 +11,7 @@ import { BonerModule } from './components/boner/boner.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatchMediaService } from '../_handies/window/match-media';
 import { BonerGlModule } from './components/boner-gl/module';
+import { SundialModule } from '../components/sundial/module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { BonerGlModule } from './components/boner-gl/module';
     RunningHeadModule,
     MenuNavigationModule,
     BonerGlModule,
-    BonerModule
+    BonerModule,
+    SundialModule
   ],
   exports: [ MenuContainer ],
   declarations: [ MenuContainer ],

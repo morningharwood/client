@@ -1,0 +1,17 @@
+@import '../../../assets/css/_mixins.scss';
+@import '../../../assets/css/_variables.scss';
+
+$text: $default-text;
+$hover: $red-mh;
+
+:host.dark-filter a {
+  color: $dark-copy;
+}
+
+:host.light-filter a {
+  color: $light-copy;
+}
+
+:host.sepia-filter a {
+  color: $sepia-copy;
+}

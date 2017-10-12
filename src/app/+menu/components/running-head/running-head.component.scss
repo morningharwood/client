@@ -4,7 +4,7 @@
 $text: $default-text;
 $hover: $red-mh;
 
-running-head {
+:host {
   font-family: $sans-default-family;
   font-weight: 700;
   font-size: 14px;
@@ -29,91 +29,80 @@ running-head {
     bottom: auto;
     background: none;
   }
-}
-.running-head__container {
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -$default-bleed;
-    left: -($default-bleed*2);
-    width: $hi-number;
-    height: 1px;
 
-    .dark-filter & {
-      background-color: $dark-copy;
-    }
-
-    .light-filter & {
-      background-color: $light-copy;
-    }
-
-    .sepia-filter & {
-      background-color: $sepia-copy;
-    }
-  }
-
-  dt {
-    @include accessible-hide();
-  }
-
-  dd {
-    @include hide();
-    line-height: 2;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: .7px;
-    padding-left: 24px;
-    position: relative;
-
-
-    @include bp(4) {
-      @include show(block);
-    }
-
-    &::before {
+  .running-head__container {
+    &::after {
+      content: '';
       position: absolute;
-      left: 0;
-      top: 2px;
-      content: '\2014';
+      bottom: -$default-bleed;
+      left: -($default-bleed*2);
+      width: $hi-number;
+      height: 1px;
 
-    }
-  }
+      .dark-filter & {
+        background-color: $dark-copy;
+      }
 
-  a {
-    cursor: pointer;
-    text-decoration: none;
+      .light-filter & {
+        background-color: $light-copy;
+      }
 
-    &:hover {
-      .scroll-through {
-        border-bottom: dotted 1px $text;
-        color: $hover;
+      .sepia-filter & {
+        background-color: $sepia-copy;
       }
     }
+  }
+}
 
-    :visited {
-      color: $text;
-    }
+a {
+  cursor: pointer;
+  text-decoration: none;
 
-    &.highlight-all:hover {
-      color: $hover;
+  &:hover {
+    .scroll-through {
       border-bottom: dotted 1px $text;
-    }
-
-    .dark-filter & {
-      color: $dark-copy;
-    }
-
-    .light-filter & {
-      color: $light-copy;
-    }
-
-    .sepia-filter & {
-      color: $sepia-copy;
+      color: $hover;
     }
   }
 
-  .scroll-through {
+  :visited {
+    color: $text;
+  }
+
+  &.highlight-all:hover {
     color: $hover;
-    font-style: italic;
+    border-bottom: dotted 1px $text;
   }
+}
+
+dt {
+  @include accessible-hide();
+}
+
+dd {
+  @include hide();
+  line-height: 2;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .7px;
+  padding-left: 24px;
+  position: relative;
+
+
+  @include bp(4) {
+    @include show(block);
+  }
+
+  &::before {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    content: '\2014';
+
+  }
+}
+
+.scroll-through {
+  color: $hover;
+  font-style: italic;
 }
