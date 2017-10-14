@@ -126,5 +126,18 @@ body {
   font-family: $fun-font
 }
 
+a.wow {
+  text-decoration: none;
+  cursor: pointer;
+  color: #555;
 
+  &:hover {
+    color: tomato;
+    font-style: italic;
+    border-bottom: dotted 1px #555;
+  }
 
+  &:visited {
+    color: #555;
+  }
+}

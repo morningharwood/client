@@ -27,6 +27,11 @@ export class BonerGlDirective implements OnInit {
   private _colors: number[];
   private _buffer: any;
   private _indexCount: number;
+  private _quat: any = quat.create();
+  private _translate: any =  [-3.5, -1.0, -9.0];
+  private _scale: any = [0.75, 0.75, 1.0];
+  private _rafId: number;
+  private _pivot: number[] = [0, 0, 0];
 
   constructor(@Inject(PLATFORM_ID) platformId: string,
               private _mms: MatchMediaService,
@@ -169,22 +174,53 @@ export class BonerGlDirective implements OnInit {
     const gl = this._gl;
     let pointSize = gl.getAttribLocation(this._shaderProgram, 'pointSize');
     gl.vertexAttrib1f(pointSize, 5);
-    // mat4.scale(this._matrix, this._matrix, [.,.5,3]);
+
   }
 
   private _scaleOut() {
-    // mat4.scale(this._matrix, this._matrix, [1.003,1.01,1])
+    if(this._quat[2] <= 0.2999) {
+      quat.slerp(this._quat, this._quat, [
+        0.0,
+        0.0,
+        0.3,
+        0.0
+      ], 0.02);
+
+      vec3.lerp(this._translate, this._translate, [
+        0.0,
+        0.0,
+        -9.0
+      ], .05);
+      vec3.lerp(this._scale, this._scale, [
+        3.5,
+        0.75,
+        1.0
+      ], .05);
+      vec3.lerp(this._pivot, this._pivot, [
+        0,
+        1.0,
+        1.0
+      ], 0.05);
+    }
   }
 
   private _draw() {
     const gl = this._gl;
-    mat4.rotateY(this._matrix,this._matrix, 0.005);
+
+    mat4.fromRotationTranslationScaleOrigin(
+      this._matrix,
+      this._quat,
+      this._translate,
+      this._scale,
+      this._pivot,
+    );
+
     this._scaleOut();
     const transformMatrix = this._gl.getUniformLocation(this._shaderProgram, 'transformMatrix');
     gl.uniformMatrix4fv(transformMatrix, false, this._matrix);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawElements(gl.TRIANGLES, this._indexCount, gl.UNSIGNED_BYTE, 0);
-    requestAnimationFrame(this._draw.bind(this));
+    this._rafId = requestAnimationFrame(this._draw.bind(this));
   }
 
   private _locatePerspective() {

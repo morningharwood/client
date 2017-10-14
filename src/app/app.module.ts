@@ -6,6 +6,7 @@ import { MenuModule } from './+menu/module';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { SundialModule } from './components/sundial/module';
+import { StoreModule } from '@ngrx/store';
 
 
 /**
@@ -20,7 +21,8 @@ import { SundialModule } from './components/sundial/module';
     BrowserModule,
     MenuModule,
     SundialModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    StoreModule.forRoot({}),
   ],
   providers: [],
   bootstrap: [ AppComponent ],

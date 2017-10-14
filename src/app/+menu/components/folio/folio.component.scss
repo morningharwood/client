@@ -1,6 +1,7 @@
 @import '../../../../assets/css/_mixins.scss';
 @import '../../../../assets/css/_variables.scss';
 
+$text: $default-text;
 $red-folio: $red-mh;
 
 :host {
@@ -8,6 +9,7 @@ $red-folio: $red-mh;
   position: fixed;
   top: 16px;
   z-index: 1;
+  color: $text;
 
   @include bp(4) {
     bottom: 0;
@@ -28,7 +30,9 @@ $red-folio: $red-mh;
 }
 
 h6, p {
+  font-weight: 500;
   font-size: 10px;
+  font-family: $sans-default-family;
 }
 
 h6 {
@@ -37,15 +41,4 @@ h6 {
 
 p {
   font-family: $sans-default-family;
-}
-
-a {
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover {
-    color: $red-folio;
-    font-style: italic;
-    border-bottom: dotted 1px $black-mh;
-  }
 }

@@ -37,12 +37,12 @@ a {
     bottom: 0;
     background: $text;
     height: 1px;
+    right: $default-bleed;
+    width: 100%;
+    left: 0;
 
     @include bp(4) {
       height: 2px;
-      left: 0;
-      right: $default-bleed;
-      width: 100%;
     }
   }
 

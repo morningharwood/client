@@ -12,11 +12,17 @@ $hover: $red-mh;
   height: 72px;
   border-radius: 72px;
   border: solid 1px darken($red-mh, 10%);
+  background-color: $red-mh;
   position: fixed;
   bottom: 16px;
   right: 16px;
-  z-index: 1;
+  left: auto;
+  z-index: 4;
   background-size: auto 50%;
+
+  @include bp(1) {
+    left: 16px;
+  }
 
   @include bp(4) {
     border-radius: 0;
@@ -72,9 +78,31 @@ a {
   &.highlight-all:hover {
     color: $hover;
     border-bottom: dotted 1px $text;
+
+    &.digital-to-physical {
+      .digital {
+        display: none;
+        visibility: hidden;
+      }
+      .physical {
+        display: inline;
+        visibility: visible;
+      }
+    }
   }
 }
 
+.digital-to-physical {
+  .digital {
+    display: inline;
+    visibility: visible;
+  }
+
+  .physical {
+    display: none;
+    visibility: hidden;
+  }
+}
 dt {
   @include accessible-hide();
 }
@@ -84,7 +112,6 @@ dd {
   line-height: 2;
   font-size: 11px;
   font-weight: 400;
-  letter-spacing: .7px;
   padding-left: 24px;
   position: relative;
 
@@ -104,5 +131,5 @@ dd {
 
 .scroll-through {
   color: $hover;
-  font-style: italic;
+  font-weight: bold;
 }

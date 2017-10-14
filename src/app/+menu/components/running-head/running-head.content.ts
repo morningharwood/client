@@ -41,6 +41,7 @@ export const initalState: RunningHeader = [
   {name: 'framework wars',},
   {name: 'blockchain',},
   {name: 'smart contracts',},
+  {name: 'just emailing me'},
 ];
 
 

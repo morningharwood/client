@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FolioComponent } from './folio.component';
 
 
+
 @NgModule({
   imports: [ CommonModule ],
   declarations: [ FolioComponent ],

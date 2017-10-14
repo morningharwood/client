@@ -7,9 +7,13 @@
   max-width: 448px;
   width: 100%;
   position: absolute;
-  bottom: 114px;
+  bottom: 9px;
   right: 0;
   z-index: 1;
+
+  @include bp(4) {
+    bottom: 114px;
+  }
 }
 
 nav {
