@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatchMediaService } from '../../../_handies/window/match-media';
 import { isPlatformBrowser } from '@angular/common';
-import {vec3, mat4, quat} from 'gl-matrix';
+import {vec3, mat4, quat} from 'gl-matrix-ts';
 
 @Directive({
   selector: '[bonerGl]',
@@ -19,12 +19,7 @@ export class BonerGlDirective implements OnInit {
   private _gl: any;
   private _shaderProgram: any;
   private vertexCount: number = 5000;
-  private _vertices: any;
-  private _angle: any = 0;
-  private _transformMatrix: WebGLUniformLocation | any;
-  private width_: number = 0;
   private _matrix = mat4.create();
-  private _colors: number[];
   private _buffer: any;
   private _indexCount: number;
   private _quat: any = quat.create();

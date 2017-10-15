@@ -5,13 +5,15 @@ $text: $default-text;
 $red-folio: $red-mh;
 
 :host {
+  @include hide();
+
   left: 28px;
   position: fixed;
-  top: 16px;
   z-index: 1;
   color: $text;
 
   @include bp(4) {
+    @include show(block);
     bottom: 0;
     left: 72px;
     top: auto;

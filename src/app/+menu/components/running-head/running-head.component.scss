@@ -5,57 +5,38 @@ $text: $default-text;
 $hover: $red-mh;
 
 :host {
-  font-family: $sans-default-family;
-  font-weight: 700;
-  font-size: 14px;
-  width: $common-size-4 + px;
-  height: 72px;
-  border-radius: 72px;
-  border: solid 1px darken($red-mh, 10%);
-  background-color: $red-mh;
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  left: auto;
-  z-index: 4;
   background-size: auto 50%;
+  display: block;
+  font-family: $sans-default-family;
+  font-size: 14px;
+  font-weight: 700;
+  height: auto;
+  left: 16px;
+  position: fixed;
+  top: 16px;
+  width: auto;
+  z-index: 4;
 
   @include bp(1) {
     left: 16px;
   }
 
   @include bp(4) {
-    border-radius: 0;
-    border: none;
-    width: 400px;
-    height: auto;
-    top: 72px;
     left: 72px;
-    right: auto;
-    bottom: auto;
-    background: none;
+    top: 72px;
   }
 
-  .running-head__container {
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -$default-bleed;
-      left: -($default-bleed*2);
-      width: $hi-number;
-      height: 1px;
+  &:before {
+    background-color: $red-mh;
+    content: '';
+    height: 55px;
+    left: -16px;
+    position: absolute;
+    top: 6px;
+    width: 3px;
 
-      .dark-filter & {
-        background-color: $dark-copy;
-      }
-
-      .light-filter & {
-        background-color: $light-copy;
-      }
-
-      .sepia-filter & {
-        background-color: $sepia-copy;
-      }
+    @include bp(4) {
+      @include hide();
     }
   }
 }
@@ -71,19 +52,20 @@ a {
     }
   }
 
-  :visited {
+  &:visited {
     color: $text;
   }
 
   &.highlight-all:hover {
-    color: $hover;
     border-bottom: dotted 1px $text;
+    color: $hover;
 
     &.digital-to-physical {
       .digital {
         display: none;
         visibility: hidden;
       }
+
       .physical {
         display: inline;
         visibility: visible;
@@ -103,29 +85,30 @@ a {
     visibility: hidden;
   }
 }
+
 dt {
   @include accessible-hide();
 }
 
 dd {
-  @include hide();
-  line-height: 2;
   font-size: 11px;
   font-weight: 400;
-  padding-left: 24px;
+  line-height: 2;
+  padding-left: 8px;
   position: relative;
 
-
   @include bp(4) {
-    @include show(block);
+    padding-left: 24px;
   }
 
   &::before {
-    position: absolute;
     left: 0;
-    top: 2px;
-    content: '\2014';
+    position: absolute;
 
+    @include bp(4) {
+      content: '\2014';
+      top: 2px;
+    }
   }
 }
 
