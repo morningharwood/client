@@ -23,7 +23,6 @@ import { SundialModule } from '../components/sundial/module';
     RunningHeadModule,
     MenuNavigationModule,
     BonerGlModule,
-    BonerModule,
     SundialModule
   ],
   exports: [ MenuContainer ],

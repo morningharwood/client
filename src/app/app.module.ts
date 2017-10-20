@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { SundialModule } from './components/sundial/module';
 import { StoreModule } from '@ngrx/store';
+import { NoteModule } from './+note/module';
+import { EffectsModule } from '@ngrx/effects';
 
 
 /**
@@ -20,7 +22,9 @@ import { StoreModule } from '@ngrx/store';
   imports: [
     BrowserModule,
     MenuModule,
+    NoteModule,
     SundialModule,
+    EffectsModule.forRoot([]),
     RouterModule.forRoot(routes),
     StoreModule.forRoot({}),
   ],

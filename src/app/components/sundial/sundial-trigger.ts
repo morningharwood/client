@@ -4,29 +4,33 @@
 import {
   Directive,
   HostBinding,
+  HostListener,
+  Input,
   OnInit,
 } from '@angular/core';
 import {
-  createSelector,
   Store,
 } from '@ngrx/store';
 import * as fromGnomon from './reducers'
 import * as gnomon from './actions';
-import { Observable } from 'rxjs/Observable';
 
 
 @Directive({
   selector: '[sundialTrigger]'
 })
-export class SundialTriggerDirective implements OnInit {
-  @HostBinding('class') themeClass = 'light-filter';
-  private gnomon: Observable<any>;
-  constructor(private store: Store<fromGnomon.State>) {
-    this.gnomon = store.select<any>('gnomon');
-  }
+export class SundialTriggerDirective {
+  @Input() theme: string;
 
-  ngOnInit() {
-    this.gnomon.subscribe(console.log);
-    this.store.dispatch(new gnomon.Daytime());
+  constructor(private store: Store<fromGnomon.State>) {}
+
+  @HostListener('click')
+  setTheme(){
+    if(this.theme === 'morning'){
+      this.store.dispatch(new gnomon.Morning());
+    } else if (this.theme === 'afternoon') {
+      this.store.dispatch(new gnomon.Evening())
+    } else {
+      this.store.dispatch(new gnomon.Afternoon());
+    }
   }
 }

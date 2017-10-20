@@ -1,0 +1,20 @@
+<p>notes</p>
+<!-- TODO (mharwood) https://aviabird.github.io/pinterest/pins-->
+<form [formGroup]="notesForm" (ngSubmit)="onSubmit(notesForm)">
+  <input type="text" formControlName="title" placeholder="The Title">
+  <!--<div *ngIf="notesForm.get('title').hasError('required')">-->
+    <!--Oops, please provide a title!-->
+  <!--</div>-->
+  <textarea rows="4" cols="50" formControlName="description" placeholder="The description"></textarea>
+  <!--<div *ngIf="notesForm.get('description').hasError('required')">-->
+    <!--Oops, please provide a description!-->
+  <!--</div>-->
+  <input type="checkbox"  name="published" checked="false" formControlName="publish" placeholder="Publish?">
+
+  <button type="submit">Send</button>
+</form>
+<!--<ul>-->
+  <!--<li *ngFor="let note of notes$ | async">-->
+    <!--{{ note.description }}-->
+  <!--</li>-->
+<!--</ul>-->
